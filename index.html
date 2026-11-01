@@ -1,0 +1,871 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="A personal Spanish notebook for everyday life in Spain: flashcards, a verb drill, a phrasebook with audio, and verb tables.">
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>Mi Cuaderno de Español</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Caveat:wght@500;700&display=swap">
+<style>
+/* Layout: a squared Spanish school notebook. Blue biro for Spanish, red pen for corrections and irregulars. One centred column with notebook tabs. */
+:root{
+  --paper:#F5F7FA; --sheet:#FFFFFF; --grid:rgba(40,70,170,.075); --line:#DCE1EB;
+  --text:#191C24; --muted:#5B6274; --ink:#1F3FA8; --ink-soft:rgba(31,63,168,.08);
+  --red:#C61F2A; --red-soft:rgba(198,31,42,.08); --ok:#1D7A4B;
+  --f-display:"Bricolage Grotesque", "Arial Narrow", system-ui, sans-serif;
+  --f-body:"Atkinson Hyperlegible", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --f-pen:"Caveat", "Comic Sans MS", cursive;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --paper:#10131A; --sheet:#171B24; --grid:rgba(140,165,255,.055); --line:#283044;
+  --text:#E7E9F0; --muted:#9BA2B4; --ink:#93AAFF; --ink-soft:rgba(147,170,255,.1);
+  --red:#FF6D70; --red-soft:rgba(255,109,112,.12); --ok:#5ED39C; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --paper:#10131A; --sheet:#171B24; --grid:rgba(140,165,255,.055); --line:#283044;
+  --text:#E7E9F0; --muted:#9BA2B4; --ink:#93AAFF; --ink-soft:rgba(147,170,255,.1);
+  --red:#FF6D70; --red-soft:rgba(255,109,112,.12); --ok:#5ED39C; color-scheme:dark}
+
+*{box-sizing:border-box}
+body{
+  background-color:var(--paper);
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:22px 22px;
+  color:var(--text); font:16px/1.55 var(--f-body);
+  padding-left:max(16px, env(safe-area-inset-left, 0px));
+  padding-right:max(16px, env(safe-area-inset-right, 0px));
+  padding-block:0 64px;
+}
+.wrap{max-width:880px;margin:0 auto}
+button,input,select{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--ink);outline-offset:2px;border-radius:4px}
+h1,h2,h3{font-family:var(--f-display);text-wrap:balance;margin:0;line-height:1.1}
+
+/* header */
+header{padding-block:36px 0;display:grid;gap:6px}
+.brand{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap}
+h1{font-size:clamp(2.4rem,7vw,3.6rem);font-weight:800;letter-spacing:-.02em;color:var(--ink)}
+.pen{font-family:var(--f-pen);color:var(--red);font-size:1.5rem;line-height:1;transform:rotate(-3deg);display:inline-block}
+.sub{color:var(--muted);margin:0;max-width:60ch}
+
+nav{display:flex;gap:4px;margin-top:22px;border-bottom:2px solid var(--line);overflow-x:auto;scrollbar-width:none}
+nav a{
+  text-decoration:none;color:var(--muted);font-weight:700;padding:10px 16px 9px;border:2px solid transparent;
+  border-bottom:none;border-radius:10px 10px 0 0;margin-bottom:-2px;white-space:nowrap;background:transparent
+}
+nav a:hover{color:var(--text)}
+nav a[aria-current="page"]{color:var(--ink);background:var(--sheet);border-color:var(--line)}
+nav a .es{font-weight:400;font-size:.85em;opacity:.75;margin-left:4px}
+
+main{padding-top:28px}
+section[hidden]{display:none}
+.lead{color:var(--muted);margin:6px 0 20px;max-width:62ch}
+h2{font-size:1.75rem;font-weight:800}
+h3{font-size:1.15rem;font-weight:600}
+.eyebrow{font-size:.75rem;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);font-weight:700}
+
+.panel{background:var(--sheet);border:1px solid var(--line);border-radius:14px}
+.seg{display:inline-flex;background:var(--sheet);border:1px solid var(--line);border-radius:999px;padding:3px;gap:2px}
+.seg button{border:0;background:transparent;padding:6px 14px;border-radius:999px;cursor:pointer;color:var(--muted);font-weight:700}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--sheet)}
+.controls{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:16px}
+select,input[type="search"],input[type="text"]{
+  background:var(--sheet);border:1px solid var(--line);border-radius:10px;padding:8px 12px;min-width:0
+}
+.btn{border:1px solid var(--line);background:var(--sheet);border-radius:10px;padding:9px 16px;cursor:pointer;font-weight:700}
+.btn:hover{border-color:var(--ink)}
+.btn.primary{background:var(--ink);border-color:var(--ink);color:var(--sheet)}
+.btn.good{border-color:var(--ok);color:var(--ok)}
+.btn.again{border-color:var(--red);color:var(--red)}
+.speak{
+  width:36px;height:36px;flex:none;border-radius:50%;border:1px solid var(--line);background:var(--sheet);
+  cursor:pointer;display:grid;place-items:center;color:var(--ink)
+}
+.speak:hover{background:var(--ink-soft);border-color:var(--ink)}
+.speak svg{width:18px;height:18px}
+.no-speech .speak{display:none}
+
+/* flashcards */
+.practice-grid{display:grid;gap:18px}
+.card{padding:clamp(22px,5vw,40px);min-height:300px;display:flex;flex-direction:column;gap:14px;position:relative}
+.card .cat{position:absolute;top:16px;right:18px}
+.card .prompt{font-family:var(--f-display);font-weight:600;font-size:clamp(1.5rem,4.5vw,2.2rem);line-height:1.2;margin-top:18px;text-wrap:balance}
+.answer{border-top:1px dashed var(--line);padding-top:14px;display:flex;gap:12px;align-items:flex-start}
+.answer .es{font-size:clamp(1.3rem,4vw,1.8rem);color:var(--ink);font-weight:700;line-height:1.25}
+.answer .pr{color:var(--muted);font-size:.95rem;margin-top:2px}
+.card .actions{margin-top:auto;display:flex;gap:10px;flex-wrap:wrap}
+.progress{display:flex;align-items:center;gap:12px;color:var(--muted);font-size:.9rem}
+.bar{flex:1;height:6px;border-radius:99px;background:var(--line);overflow:hidden;min-width:80px}
+.bar i{display:block;height:100%;background:var(--ok);width:0;transition:width .3s}
+.hint{color:var(--muted);font-size:.85rem}
+kbd{font:inherit;font-size:.8em;border:1px solid var(--line);border-bottom-width:2px;border-radius:5px;padding:0 5px}
+
+/* drill */
+.drill .q{font-family:var(--f-display);font-size:clamp(1.3rem,4vw,1.8rem);font-weight:600}
+.drill .q b{color:var(--ink)}
+.drill form{display:flex;gap:10px;flex-wrap:wrap}
+.drill input{flex:1 1 220px;font-size:1.2rem;padding:10px 14px}
+.result{min-height:1.6em;font-weight:700}
+.result.ok{color:var(--ok)} .result.bad{color:var(--red)} .result.near{color:var(--ink)}
+.accents{display:flex;gap:6px;flex-wrap:wrap}
+.accents button{border:1px solid var(--line);background:var(--sheet);border-radius:8px;width:36px;height:34px;cursor:pointer;font-weight:700}
+
+/* phrasebook */
+.key{padding:14px 18px;margin-bottom:18px;display:grid;gap:6px}
+.key ul{margin:0;padding:0;list-style:none;display:flex;flex-wrap:wrap;gap:6px 18px;font-size:.92rem}
+.key b{color:var(--ink)}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
+.chip{border:1px solid var(--line);background:var(--sheet);border-radius:999px;padding:5px 12px;cursor:pointer;font-size:.9rem}
+.chip[aria-pressed="true"]{background:var(--ink-soft);border-color:var(--ink);color:var(--ink);font-weight:700}
+.list{overflow:hidden}
+.group-h{padding:14px 18px 6px;background:var(--paper);border-bottom:1px solid var(--line)}
+.row{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.25fr) auto;gap:6px 18px;padding:12px 18px;border-bottom:1px solid var(--line);align-items:center}
+.row:last-child{border-bottom:0}
+.row .en{color:var(--muted)}
+.row .es{color:var(--ink);font-weight:700;font-size:1.06rem}
+.row .pr{color:var(--muted);font-size:.85rem;font-weight:400;display:block}
+.empty{padding:28px 18px;color:var(--muted)}
+@media (max-width:600px){
+  .row{grid-template-columns:minmax(0,1fr) auto}
+  .row .en{grid-column:1/-1;font-size:.9rem;order:-1}
+}
+
+/* verbs */
+.pronouns{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:22px}
+.pronouns span{background:var(--sheet);border:1px solid var(--line);border-radius:8px;padding:4px 10px;font-size:.9rem}
+.pronouns span b{color:var(--ink)}
+.tenses{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px}
+.tense{padding:16px 18px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.tense .when{color:var(--muted);font-size:.88rem;margin:0}
+.tense table{border-collapse:collapse;width:100%;font-size:.95rem}
+.tense td{padding:3px 0;border-bottom:1px dotted var(--line);vertical-align:top}
+.tense td:first-child{color:var(--muted);width:42%;font-size:.85rem;padding-right:8px}
+.tense tr:last-child td{border-bottom:0}
+.f .st{color:var(--text)} .f .en{color:var(--ink);font-weight:700} .f .aux{color:var(--muted)}
+.f .irr{color:var(--red);font-weight:700}
+.tense .ex{font-size:.88rem;background:var(--ink-soft);border-radius:8px;padding:8px 10px;margin-top:auto}
+.tense .ex i{color:var(--muted);font-style:normal;display:block}
+.legend{display:flex;gap:16px;flex-wrap:wrap;font-size:.88rem;color:var(--muted);margin:10px 0 18px}
+.legend b{font-weight:700}
+.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px;margin-top:32px}
+.box{padding:18px;min-width:0}
+.box p{margin:6px 0 10px;color:var(--muted);font-size:.92rem}
+.scroll{overflow-x:auto}
+.tbl{border-collapse:collapse;width:100%;font-size:.93rem}
+.tbl th{text-align:left;font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding:6px 8px;border-bottom:1px solid var(--line)}
+.tbl td{padding:6px 8px;border-bottom:1px dotted var(--line)}
+.tbl td.es{color:var(--red);font-weight:700}
+.tbl td.pr{color:var(--muted);font-size:.85rem;white-space:nowrap}
+.mini dt{font-weight:700;color:var(--ink);margin-top:8px}
+.mini dd{margin:0;color:var(--muted);font-size:.92rem}
+
+/* corrections */
+.fixes{display:grid;gap:10px}
+.fix{padding:14px 18px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:4px 22px;align-items:baseline}
+.fix .was{text-decoration:line-through;text-decoration-color:var(--red);text-decoration-thickness:2px;color:var(--muted)}
+.fix .now{color:var(--ink);font-weight:700}
+.fix .why{grid-column:1/-1;font-family:var(--f-pen);color:var(--red);font-size:1.3rem;line-height:1.2}
+.fix .tag{font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;font-weight:700;color:var(--muted)}
+@media (max-width:600px){.fix{grid-template-columns:1fr}}
+
+@media (prefers-reduced-motion: reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="brand">
+      <h1>Cuaderno</h1>
+      <span class="pen">¡poco a poco!</span>
+    </div>
+    <p class="sub">Your everyday Spanish for life in Spain, built from your own notes. Spanish is in blue. Red pen marks corrections and irregular forms.</p>
+    <nav aria-label="Sections">
+      <a href="#practicar" data-view="practicar">Practise<span class="es">practicar</span></a>
+      <a href="#frases" data-view="frases">Phrases<span class="es">frases</span></a>
+      <a href="#verbos" data-view="verbos">Verbs<span class="es">verbos</span></a>
+      <a href="#correcciones" data-view="correcciones">Corrections<span class="es">correcciones</span></a>
+    </nav>
+  </header>
+
+  <main>
+    <!-- PRACTISE -->
+    <section id="v-practicar">
+      <div class="controls">
+        <div class="seg" role="group" aria-label="Practice mode">
+          <button type="button" id="m-cards" aria-pressed="true">Phrase cards</button>
+          <button type="button" id="m-drill" aria-pressed="false">Verb drill</button>
+        </div>
+      </div>
+
+      <div id="p-cards" class="practice-grid">
+        <div class="controls">
+          <select id="c-cat" aria-label="Topic"></select>
+          <div class="seg" role="group" aria-label="Direction">
+            <button type="button" id="d-en" aria-pressed="true">English → Spanish</button>
+            <button type="button" id="d-es" aria-pressed="false">Spanish → English</button>
+          </div>
+        </div>
+        <div class="progress"><span id="c-count"></span><div class="bar"><i id="c-bar"></i></div><button type="button" class="btn" id="c-reset">Reset topic</button></div>
+        <article class="panel card" id="card" aria-live="polite"></article>
+        <p class="hint">Keys: <kbd>Space</kbd> show answer · <kbd>1</kbd> again · <kbd>2</kbd> got it · <kbd>S</kbd> hear it</p>
+      </div>
+
+      <div id="p-drill" class="practice-grid" hidden>
+        <div class="controls">
+          <select id="dr-tense" aria-label="Tense"></select>
+          <span class="hint" id="dr-streak"></span>
+        </div>
+        <article class="panel card drill">
+          <span class="eyebrow" id="dr-label"></span>
+          <div class="q" id="dr-q"></div>
+          <form id="dr-form" autocomplete="off">
+            <input type="text" id="dr-in" aria-label="Your answer" placeholder="Type the Spanish" autocapitalize="off" spellcheck="false">
+            <button class="btn primary" type="submit">Check</button>
+          </form>
+          <div class="accents" aria-label="Insert accented letter">
+            <button type="button">á</button><button type="button">é</button><button type="button">í</button><button type="button">ó</button><button type="button">ú</button><button type="button">ñ</button>
+          </div>
+          <div class="result" id="dr-res" aria-live="polite"></div>
+          <div class="actions"><button type="button" class="btn" id="dr-next">Next verb</button></div>
+        </article>
+      </div>
+    </section>
+
+    <!-- PHRASES -->
+    <section id="v-frases" hidden>
+      <h2>Phrasebook</h2>
+      <p class="lead">Everything from your notes, corrected and written the way people say it in Spain. Tap the speaker to hear it.</p>
+      <div class="panel key">
+        <span class="eyebrow">Sounds in Spain</span>
+        <ul>
+          <li><b>ce, ci, z</b> = “th” as in think</li>
+          <li><b>j, ge, gi</b> = throaty “h”</li>
+          <li><b>ll, y</b> = “y”</li>
+          <li><b>ñ</b> = “ny”</li>
+          <li><b>v</b> = “b”</li>
+          <li><b>h</b> is silent</li>
+          <li><b>rr</b> is rolled</li>
+          <li>CAPITALS = stressed syllable</li>
+        </ul>
+      </div>
+      <div class="controls"><input type="search" id="f-q" placeholder="Search English or Spanish" aria-label="Search phrases" style="flex:1 1 260px"></div>
+      <div class="chips" id="f-chips"></div>
+      <div class="panel list" id="f-list"></div>
+    </section>
+
+    <!-- VERBS -->
+    <section id="v-verbos" hidden>
+      <h2>Verbs</h2>
+      <p class="lead">The tenses from your notes in one place. Pick a verb to see every form.</p>
+      <div class="pronouns">
+        <span><b>yo</b> I</span><span><b>tú</b> you</span><span><b>él / ella / usted</b> he / she / you (polite)</span>
+        <span><b>nosotros</b> we</span><span><b>vosotros</b> you all (used in Spain)</span><span><b>ellos / ustedes</b> they / you all (polite)</span>
+      </div>
+      <div class="controls">
+        <label for="v-verb" class="eyebrow">Verb</label>
+        <select id="v-verb"></select>
+      </div>
+      <div class="legend"><span><b style="color:var(--ink)">blue</b> regular ending</span><span><b style="color:var(--red)">red</b> irregular, learn by heart</span><span><b style="color:var(--muted)">grey</b> helper verb</span></div>
+      <div class="tenses" id="v-tenses"></div>
+
+      <div class="two">
+        <div class="panel box">
+          <h3>Reflexive verbs</h3>
+          <p>Actions you do to yourself. The little word goes before the verb.</p>
+          <div class="scroll"><table class="tbl" id="refl"></table></div>
+        </div>
+        <div class="panel box">
+          <h3>Is, are, there is</h3>
+          <dl class="mini">
+            <dt>es / son</dt><dd>What something is, permanently. <i>Es mi padre. Es divertido.</i></dd>
+            <dt>está / están</dt><dd>Where something is, or how it is right now. <i>Está caliente. Está abierto.</i></dd>
+            <dt>hay</dt><dd>There is / there are. <i>Hay mucho ruido.</i></dd>
+            <dt>este / esta / esto</dt><dd>This. <i>Este</i> for masculine nouns, <i>esta</i> for feminine, <i>esto</i> when you don't name the thing. <i>Esto es importante.</i></dd>
+            <dt>probar / intentar</dt><dd>Both mean “try”. <i>Probar</i> is to taste or test something, <i>intentar</i> is to attempt to do it. <i>Quiero probar la cerveza. Quiero intentar saltar.</i></dd>
+          </dl>
+        </div>
+      </div>
+
+      <div class="panel box" style="margin-top:14px">
+        <h3>Irregular past participles</h3>
+        <p>These replace the usual -ado / -ido after <i>he, has, ha…</i> So it's <i>he escrito</i>, not <i>he escribido</i>.</p>
+        <div class="scroll"><table class="tbl" id="parts"></table></div>
+      </div>
+    </section>
+
+    <!-- CORRECTIONS -->
+    <section id="v-correcciones" hidden>
+      <h2>Corrections</h2>
+      <p class="lead">Things I changed from your notes, so you don't keep practising the old version. Some were small mistakes. Others are Latin American Spanish, where Spain says it differently.</p>
+      <div class="controls">
+        <div class="seg" role="group" aria-label="Filter corrections">
+          <button type="button" data-fx="all" aria-pressed="true">All</button>
+          <button type="button" data-fx="mistake" aria-pressed="false">Mistakes</button>
+          <button type="button" data-fx="spain" aria-pressed="false">Spain vs Latin America</button>
+        </div>
+      </div>
+      <div class="fixes" id="fixes"></div>
+    </section>
+  </main>
+</div>
+
+<script>
+(function(){
+"use strict";
+const store = {
+  get(k, d){ try{ const v = localStorage.getItem(k); return v ? JSON.parse(v) : d; }catch(e){ return d; } },
+  set(k, v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} }
+};
+const $ = s => document.querySelector(s);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+/* ---------- speech ---------- */
+const canSpeak = "speechSynthesis" in window && typeof SpeechSynthesisUtterance !== "undefined";
+if(!canSpeak) document.documentElement.classList.add("no-speech");
+function speak(text){
+  if(!canSpeak) return;
+  try{
+    speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(text.replace(/\s\/\s/g, ", "));
+    u.lang = "es-ES"; u.rate = 0.85;
+    const vs = speechSynthesis.getVoices();
+    const v = vs.find(x => x.lang === "es-ES") || vs.find(x => /^es/i.test(x.lang));
+    if(v) u.voice = v;
+    speechSynthesis.speak(u);
+  }catch(e){}
+}
+const SPK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4V5z" fill="currentColor"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/></svg>';
+const speakBtn = es => `<button type="button" class="speak" data-say="${esc(es)}" aria-label="Hear: ${esc(es)}">${SPK}</button>`;
+document.addEventListener("click", e => { const b = e.target.closest("[data-say]"); if(b) speak(b.dataset.say); });
+
+/* ---------- phrases ---------- */
+const CATS = {
+  basics:"Basics", wishes:"Wishes & manners", around:"Getting around", time:"Time & waiting",
+  think:"Opinions & memory", feel:"Feelings & weather", out:"Out and about", routine:"Daily routine",
+  spain:"Life admin in Spain", story:"Telling a story", describe:"Describing things"
+};
+const RAW = `
+basics|Please|Por favor|por fah-BOR
+basics|Excuse me|Disculpe|dees-KOOL-peh
+basics|Sorry (to get past, or didn't catch that)|Perdona|pehr-DOH-nah
+basics|I'm sorry|Lo siento|loh SYEN-toh
+basics|Of course|Claro|KLAH-roh
+basics|Of course (more formal)|Por supuesto|por soo-PWES-toh
+basics|With pleasure|Con mucho gusto|kon MOO-choh GOOS-toh
+basics|Really? Seriously?|¿En serio?|en SEH-ryoh
+basics|No problem|No pasa nada|noh PAH-sah NAH-dah
+basics|It doesn't matter|No importa|noh eem-POR-tah
+basics|It's not necessary|No hace falta|noh AH-theh FAHL-tah
+basics|Don't worry|No te preocupes|noh teh preh-oh-KOO-pes
+basics|I don't know|No sé|noh SEH
+basics|I don't know the word|No sé la palabra|noh SEH lah pah-LAH-brah
+basics|Can you repeat that?|¿Puedes repetirlo?|PWEH-des rreh-peh-TEER-loh
+basics|What did you say?|¿Qué has dicho?|keh as DEE-choh
+basics|Sorry, I didn't hear you|Perdona, no te he oído|pehr-DOH-nah, noh teh eh oh-EE-doh
+basics|I can't hear you|No te oigo|noh teh OY-goh
+basics|Well, I speak a little Spanish|Pues, hablo un poco de español|pwes, AH-bloh oon POH-koh deh es-pah-NYOL
+basics|I'm learning Spanish little by little|Estoy aprendiendo español poco a poco|es-TOY ah-pren-DYEN-doh es-pah-NYOL POH-koh ah POH-koh
+basics|How are you?|¿Qué tal?|keh TAL
+basics|How have you been?|¿Cómo has estado?|KOH-moh as es-TAH-doh
+wishes|I hope so|Eso espero|EH-soh es-PEH-roh
+wishes|I hope not|Espero que no|es-PEH-roh keh noh
+wishes|I hope it doesn't rain|Espero que no llueva|es-PEH-roh keh noh YWEH-bah
+wishes|I hope you're well|Espero que estés bien|es-PEH-roh keh es-TES byen
+wishes|Get well soon|Que te mejores|keh teh meh-HOH-res
+wishes|Have a good one|Que te vaya bien|keh teh BAH-yah byen
+wishes|Enjoy your meal|¡Que aproveche!|keh ah-proh-BEH-cheh
+around|I'm coming / on my way|Ya voy|yah BOY
+around|I'm off|Me voy|meh BOY
+around|I'm back|Ya he vuelto|yah eh BWEL-toh
+around|Follow me|Sígueme|SEE-geh-meh
+around|This way|Por aquí|por ah-KEE
+around|That way|Por ahí|por ah-EE
+around|To the right|A la derecha|ah lah deh-REH-chah
+around|To the left|A la izquierda|ah lah eeth-KYEHR-dah
+around|I'll come and pick you up|Voy a recogerte|boy ah rreh-koh-HEHR-teh
+around|Come and pick me up|Ven a recogerme|ben ah rreh-koh-HEHR-meh
+around|Don't go|No te vayas|noh teh BAH-yahs
+around|Put your seatbelt on|Abróchate el cinturón|ah-BROH-chah-teh el theen-too-ROHN
+around|See you|Nos vemos|nos BEH-mos
+around|See you at home|Nos vemos en casa|nos BEH-mos en KAH-sah
+around|See you at the bus stop|Nos vemos en la parada|nos BEH-mos en lah pah-RAH-dah
+around|See you at the station|Nos vemos en la estación|nos BEH-mos en lah es-tah-THYOHN
+around|See you tomorrow|Hasta mañana|AHS-tah mah-NYAH-nah
+around|See you soon|Hasta pronto|AHS-tah PROHN-toh
+around|I'm going to say goodbye|Me voy a despedir|meh boy ah des-peh-DEER
+time|Not yet|Todavía no|toh-dah-BEE-ah noh
+time|One moment, please|Un momento, por favor|oon moh-MEN-toh, por fah-BOR
+time|Give me a moment|Dame un momento|DAH-meh oon moh-MEN-toh
+time|I need a break|Necesito un descanso|neh-theh-SEE-toh oon des-KAHN-soh
+time|Faster|Más rápido|mahs RRAH-pee-doh
+time|Hurry up|Date prisa|DAH-teh PREE-sah
+time|Take it easy|Con calma|kon KAHL-mah
+time|Almost|Casi|KAH-see
+time|I'm almost done|Ya casi termino|yah KAH-see tehr-MEE-noh
+time|I'm almost there|Ya casi llego|yah KAH-see YEH-goh
+time|Wait for me|Espérame|es-PEH-rah-meh
+time|I'll wait here|Voy a esperar aquí|boy ah es-peh-RAR ah-KEE
+time|You still have time|Todavía tienes tiempo|toh-dah-BEE-ah TYEH-nes TYEM-poh
+time|Since when?|¿Desde cuándo?|DES-deh KWAN-doh
+time|I've just arrived|Acabo de llegar|ah-KAH-boh deh yeh-GAR
+time|I have an appointment|Tengo una cita|TEN-goh OO-nah THEE-tah
+time|Once, twice, three times|Una vez, dos veces, tres veces|OO-nah beth, dos BEH-thes, tres BEH-thes
+think|To be honest…|La verdad…|lah behr-DAHD
+think|Let's see…|A ver…|ah BEHR
+think|Let's see, I want pizza|A ver, quiero pizza|ah BEHR, KYEH-roh PEET-sah
+think|I can't|No puedo|noh PWEH-doh
+think|No idea|Ni idea|nee ee-DEH-ah
+think|I haven't got a clue|No tengo ni idea|noh TEN-goh nee ee-DEH-ah
+think|I knew it|Lo sabía|loh sah-BEE-ah
+think|I doubt it|Lo dudo|loh DOO-doh
+think|I don't think so|Creo que no|KREH-oh keh noh
+think|More or less|Más o menos|mahs oh MEH-nos
+think|Think about it|Piénsalo|PYEN-sah-loh
+think|I'm on it|Estoy en ello|es-TOY en EH-yoh
+think|I'm not sure|No estoy seguro / segura|noh es-TOY seh-GOO-roh / seh-GOO-rah
+think|Are you sure?|¿Estás seguro? / ¿Estás segura?|es-TAHS seh-GOO-roh / seh-GOO-rah
+think|I'm in favour|Estoy a favor|es-TOY ah fah-BOR
+think|I'm against it|Estoy en contra|es-TOY en KON-trah
+think|Are you joking?|¿Estás de broma?|es-TAHS deh BROH-mah
+think|Better|Mejor|meh-HOR
+think|Much better|Mucho mejor|MOO-choh meh-HOR
+think|Better not|Mejor no|meh-HOR noh
+think|Don't forget|Que no se te olvide|keh noh seh teh ol-BEE-deh
+think|I forgot|Se me ha olvidado|seh meh ah ol-bee-DAH-doh
+think|I completely forgot|Se me olvidó por completo|seh meh ol-bee-DOH por kom-PLEH-toh
+think|Remember|Acuérdate|ah-KWEHR-dah-teh
+think|Forget it|Olvídalo|ol-BEE-dah-loh
+think|I already knew|Ya lo sabía|yah loh sah-BEE-ah
+think|I didn't know|No lo sabía|noh loh sah-BEE-ah
+think|You didn't know?|¿No lo sabías?|noh loh sah-BEE-ahs
+think|You already knew|Ya lo sabías|yah loh sah-BEE-ahs
+feel|It's hot (weather)|Hace calor|AH-theh kah-LOR
+feel|It's so hot!|¡Qué calor!|keh kah-LOR
+feel|It's hot (food, object)|Está caliente|es-TAH kah-LYEN-teh
+feel|It's cold (weather)|Hace frío|AH-theh FREE-oh
+feel|It's so cold!|¡Qué frío!|keh FREE-oh
+feel|It's cold (food, object)|Está frío|es-TAH FREE-oh
+feel|I'm cold|Tengo frío|TEN-goh FREE-oh
+feel|I'm hot|Tengo calor|TEN-goh kah-LOR
+feel|It's cold and damp today|Hoy hace frío y hay humedad|oy AH-theh FREE-oh ee eye oo-meh-DAHD
+feel|There was a big storm last night|Anoche hubo una gran tormenta|ah-NOH-cheh OO-boh OO-nah gran tor-MEN-tah
+feel|I love it|Me encanta|meh en-KAHN-tah
+feel|I like it a lot|Me gusta mucho|meh GOOS-tah MOO-choh
+feel|It bothers me|Me molesta|meh moh-LES-tah
+feel|I'm in a good mood|Estoy de buen humor|es-TOY deh bwen oo-MOR
+feel|I'm in a bad mood|Estoy de mal humor|es-TOY deh mal oo-MOR
+feel|I'm not in a great mood|No estoy de muy buen humor|noh es-TOY deh mwee bwen oo-MOR
+feel|I'm busy|Estoy ocupado / ocupada|es-TOY oh-koo-PAH-doh / oh-koo-PAH-dah
+feel|I'm very distracted|Estoy muy distraído / distraída|es-TOY mwee dees-trah-EE-doh
+feel|I was thinking about something else|Estaba pensando en otra cosa|es-TAH-bah pen-SAN-doh en OH-trah KOH-sah
+feel|I need to concentrate|Necesito concentrarme|neh-theh-SEE-toh kon-then-TRAR-meh
+feel|I need to pay attention|Tengo que prestar atención|TEN-goh keh pres-TAR ah-ten-THYOHN
+feel|It's fun|Es divertido|es dee-behr-TEE-doh
+feel|It's boring|Es aburrido|es ah-boo-RREE-doh
+feel|Did you like it?|¿Te ha gustado?|teh ah goos-TAH-doh
+out|I'm just looking|Solo estoy mirando|SOH-loh es-TOY mee-RAN-doh
+out|Can I have a coffee? (ordering)|¿Me pones un café?|meh POH-nes oon kah-FEH
+out|I want to try the beer|Quiero probar la cerveza|KYEH-roh proh-BAR lah thehr-BEH-thah
+out|You have to try it|Tienes que probarlo|TYEH-nes keh proh-BAR-loh
+out|What do you want to eat?|¿Qué quieres comer?|keh KYEH-res koh-MEHR
+out|What time do you open?|¿A qué hora abren?|ah keh OH-rah AH-bren
+out|What time do you close?|¿A qué hora cierran?|ah keh OH-rah THYEH-rran
+out|Until what time are you open?|¿Hasta qué hora está abierto?|AHS-tah keh OH-rah es-TAH ah-BYEHR-toh
+out|Can I use this?|¿Puedo usar esto?|PWEH-doh oo-SAR ES-toh
+out|Can you read this?|¿Puedes leer esto?|PWEH-des leh-EHR ES-toh
+out|May I come in?|¿Puedo pasar?|PWEH-doh pah-SAR
+out|Will you come with me?|¿Me acompañas?|meh ah-kom-PAH-nyahs
+out|Each person pays their own|Cada uno paga lo suyo|KAH-dah OO-noh PAH-gah loh SOO-yoh
+out|It's very noisy|Hay mucho ruido|eye MOO-choh RRWEE-doh
+out|I heard a noise|He oído un ruido|eh oh-EE-doh oon RRWEE-doh
+out|I pressed the button|He pulsado el botón|eh pool-SAH-doh el boh-TOHN
+out|I'm here to collect a parcel|Vengo a recoger un paquete|BEN-goh ah rreh-koh-HEHR oon pah-KEH-teh
+out|The waves are big / small / medium|Las olas son grandes / pequeñas / medianas|las OH-las son GRAN-des / peh-KEH-nyas / meh-DYAH-nas
+out|I went surfing|Fui a hacer surf|fwee ah ah-THEHR soorf
+out|I went for a run|Fui a correr|fwee ah koh-RREHR
+out|What happened?|¿Qué ha pasado?|keh ah pah-SAH-doh
+out|What are you up to?|¿Qué haces?|keh AH-thes
+out|What are you doing right now?|¿Qué estás haciendo?|keh es-TAHS ah-THYEN-doh
+out|It's over|Se acabó|seh ah-kah-BOH
+out|Which one?|¿Cuál?|kwal
+out|Which one do you like?|¿Cuál te gusta?|kwal teh GOOS-tah
+out|Ask him / ask her|Pregúntale|preh-GOON-tah-leh
+out|Come on, come along!|¡Vente!|BEN-teh
+out|Don't come|No vengas|noh BEN-gas
+out|It's in fashion|Está de moda|es-TAH deh MOH-dah
+out|Everything will be fine|Todo va a salir bien|TOH-doh bah ah sah-LEER byen
+routine|I woke up this morning|Me he despertado esta mañana|meh eh des-pehr-TAH-doh ES-tah mah-NYAH-nah
+routine|I'm having a shower|Me estoy duchando|meh es-TOY doo-CHAN-doh
+routine|I was having a shower|Me estaba duchando|meh es-TAH-bah doo-CHAN-doh
+routine|I'm brushing my teeth|Me estoy lavando los dientes|meh es-TOY lah-BAN-doh los DYEN-tes
+routine|I'm getting dressed|Me estoy vistiendo|meh es-TOY bees-TYEN-doh
+routine|I'm making breakfast|Estoy preparando el desayuno|es-TOY preh-pah-RAN-doh el deh-sah-YOO-noh
+routine|I'm having breakfast|Estoy desayunando|es-TOY deh-sah-yoo-NAN-doh
+routine|I'm making lunch|Estoy preparando la comida|es-TOY preh-pah-RAN-doh lah koh-MEE-dah
+routine|I'm having lunch|Estoy comiendo|es-TOY koh-MYEN-doh
+routine|I'm making dinner|Estoy haciendo la cena|es-TOY ah-THYEN-doh lah THEH-nah
+routine|I'm washing up|Estoy fregando los platos|es-TOY freh-GAN-doh los PLAH-tos
+routine|I'm driving|Estoy conduciendo|es-TOY kon-doo-THYEN-doh
+routine|I'm going out for a run|Voy a salir a correr|boy ah sah-LEER ah koh-RREHR
+routine|I'm going to work|Voy al trabajo|boy al trah-BAH-hoh
+routine|I've worked today|Hoy he trabajado|oy eh trah-bah-HAH-doh
+routine|I'm going to bed|Me voy a la cama|meh boy ah lah KAH-mah
+spain|I'm waiting for my foreigner's ID card|Estoy esperando la TIE|es-TOY es-peh-RAN-doh lah TEE-eh
+spain|Foreigner's ID card (TIE)|La tarjeta de identidad de extranjero|lah tar-HEH-tah deh ee-den-tee-DAHD deh eks-tran-HEH-roh
+spain|I can't leave Spain|No puedo salir de España|noh PWEH-doh sah-LEER deh es-PAH-nyah
+spain|I'll come back to Spain|Volveré a España|bol-beh-REH ah es-PAH-nyah
+spain|I left Spain|Me fui de España|meh fwee deh es-PAH-nyah
+spain|You left Spain|Te fuiste de España|teh FWEES-teh deh es-PAH-nyah
+spain|We left Spain|Nos fuimos de España|nos FWEE-mos deh es-PAH-nyah
+spain|They left Spain|Se fueron de España|seh FWEH-ron deh es-PAH-nyah
+spain|I'm going to move house|Me voy a mudar|meh boy ah moo-DAR
+spain|I moved|Me mudé|meh moo-DEH
+spain|When are you moving?|¿Cuándo te mudas?|KWAN-doh teh MOO-das
+spain|I'm retired|Estoy jubilado / jubilada|es-TOY hoo-bee-LAH-doh / hoo-bee-LAH-dah
+spain|I've already retired|Ya me he jubilado|yah meh eh hoo-bee-LAH-doh
+spain|I'm not retired yet|Todavía no me he jubilado|toh-dah-BEE-ah noh meh eh hoo-bee-LAH-doh
+spain|They're visiting me|Me están visitando|meh es-TAN bee-see-TAN-doh
+spain|She's my mum|Es mi madre|es mee MAH-dreh
+spain|He's my dad|Es mi padre|es mee PAH-dreh
+spain|She's my daughter|Es mi hija|es mee EE-hah
+spain|He's my son|Es mi hijo|es mee EE-hoh
+spain|She's my aunt|Es mi tía|es mee TEE-ah
+spain|He's my uncle|Es mi tío|es mee TEE-oh
+story|What did you do yesterday?|¿Qué hiciste ayer?|keh ee-THEES-teh ah-YEHR
+story|Yesterday I ate paella with my friends|Ayer comí paella con mis amigos|ah-YEHR koh-MEE pah-EH-yah kon mees ah-MEE-gos
+story|Last night I danced at the party|Anoche bailé en la fiesta|ah-NOH-cheh bai-LEH en lah FYES-tah
+story|She wrote a letter yesterday|Ella escribió una carta ayer|EH-yah es-kree-BYOH OO-nah KAR-tah ah-YEHR
+story|Yesterday I went for a walk and ate at a restaurant|Ayer fui a caminar y comí en un restaurante|
+story|I was going to run, but I was tired|Iba a correr, pero estaba cansado|EE-bah ah koh-RREHR, PEH-roh es-TAH-bah kan-SAH-doh
+story|I went to the shop. I was going to walk in the park, but I was tired.|Fui a la tienda. Iba a pasear por el parque, pero estaba cansado.|
+story|What will you do tomorrow?|¿Qué harás mañana?|keh ah-RAHS mah-NYAH-nah
+story|Tomorrow I'm going for a walk with my friend, then I'm going to work|Mañana voy a pasear con mi amigo y luego voy a trabajar|
+story|I'll have lunch with my father and go for a run in the park|Comeré con mi padre y correré en el parque|
+story|I'm going to travel to Italy|Voy a viajar a Italia|boy ah byah-HAR ah ee-TAH-lyah
+story|We're going out with our friends|Vamos a salir con nuestros amigos|
+story|I want to try to play|Quiero intentar jugar|KYEH-roh een-ten-TAR hoo-GAR
+describe|Quiet|Tranquilo / tranquila|tran-KEE-loh
+describe|Quieter|Más tranquilo / tranquila|mahs tran-KEE-loh
+describe|Noisy|Ruidoso / ruidosa|rrwee-DOH-soh
+describe|Loud (music, voice)|Alto / alta|AHL-toh
+describe|Louder|Más alto|mahs AHL-toh
+describe|Busy (a place)|Concurrido / concurrida|kon-koo-RREE-doh
+describe|Small|Pequeño / pequeña|peh-KEH-nyoh
+describe|Smaller|Más pequeño / pequeña|mahs peh-KEH-nyoh
+describe|Big|Grande|GRAN-deh
+describe|Bigger|Más grande|mahs GRAN-deh
+describe|Long|Largo / larga|LAR-goh
+describe|Longer|Más largo / larga|mahs LAR-goh
+describe|Short|Corto / corta|KOR-toh
+describe|Shorter|Más corto / corta|mahs KOR-toh
+describe|Fast|Rápido / rápida|RRAH-pee-doh
+describe|Faster|Más rápido|mahs RRAH-pee-doh
+describe|Slow|Lento / lenta|LEN-toh
+describe|Slower|Más lento / lenta|mahs LEN-toh
+describe|First, second, third, fourth, fifth|Primero, segundo, tercero, cuarto, quinto|pree-MEH-roh, seh-GOON-doh, tehr-THEH-roh, KWAR-toh, KEEN-toh
+describe|Sixth, seventh, eighth, ninth, tenth|Sexto, séptimo, octavo, noveno, décimo|SEKS-toh, SEP-tee-moh, ok-TAH-boh, noh-BEH-noh, DEH-thee-moh
+`;
+const PHRASES = RAW.trim().split("\n").map(l => { const [cat,en,es,pr] = l.split("|"); return {cat,en,es,pr:pr||""}; });
+
+/* ---------- routing ---------- */
+const VIEWS = ["practicar","frases","verbos","correcciones"];
+function route(){
+  const h = location.hash.replace("#","");
+  const v = VIEWS.includes(h) ? h : "practicar";
+  VIEWS.forEach(x => { $("#v-"+x).hidden = x !== v; });
+  document.querySelectorAll("nav a").forEach(a => { if(a.dataset.view===v) a.setAttribute("aria-current","page"); else a.removeAttribute("aria-current"); });
+}
+addEventListener("hashchange", route);
+
+/* ---------- flashcards ---------- */
+let known = new Set(store.get("cuaderno-known", []));
+let dir = store.get("cuaderno-dir", "en");
+let cat = store.get("cuaderno-cat", "all");
+let queue = [], revealed = false;
+const cSel = $("#c-cat");
+cSel.innerHTML = `<option value="all">All topics (${PHRASES.length})</option>` +
+  Object.entries(CATS).map(([k,v]) => `<option value="${k}">${v} (${PHRASES.filter(p=>p.cat===k).length})</option>`).join("");
+if(!(cat==="all" || CATS[cat])) cat = "all";
+cSel.value = cat;
+
+const deck = () => cat === "all" ? PHRASES : PHRASES.filter(p => p.cat === cat);
+function shuffle(a){ for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
+function buildQueue(){ queue = shuffle(deck().filter(p => !known.has(p.es))); revealed = false; }
+function updateProgress(){
+  const d = deck(), k = d.filter(p => known.has(p.es)).length;
+  $("#c-count").textContent = `${k} of ${d.length} learned`;
+  $("#c-bar").style.width = (d.length ? k/d.length*100 : 0) + "%";
+}
+function renderCard(){
+  updateProgress();
+  const el = $("#card");
+  if(!queue.length){
+    el.innerHTML = `<span class="eyebrow">${cat==="all"?"All topics":CATS[cat]}</span>
+      <div class="prompt">¡Muy bien! You've learned every phrase in this topic.</div>
+      <p class="hint">Pick another topic, or reset this one to go through it again.</p>`;
+    return;
+  }
+  const p = queue[0];
+  const front = dir === "en" ? esc(p.en) : esc(p.es);
+  let html = `<span class="eyebrow cat">${CATS[p.cat]}</span>
+    <span class="eyebrow">${dir==="en"?"How do you say":"What does this mean"}</span>
+    <div class="prompt">${front}</div>`;
+  if(dir === "es" && !revealed) html += `<div>${speakBtn(p.es)}</div>`;
+  if(revealed){
+    html += dir === "en"
+      ? `<div class="answer">${speakBtn(p.es)}<div><div class="es">${esc(p.es)}</div>${p.pr?`<div class="pr">${esc(p.pr)}</div>`:""}</div></div>`
+      : `<div class="answer"><div><div class="es" style="color:var(--text)">${esc(p.en)}</div>${p.pr?`<div class="pr">${esc(p.pr)}</div>`:""}</div></div>`;
+    html += `<div class="actions"><button type="button" class="btn again" id="c-again">Again</button><button type="button" class="btn good" id="c-got">Got it</button></div>`;
+  } else {
+    html += `<div class="actions"><button type="button" class="btn primary" id="c-show">Show answer</button></div>`;
+  }
+  el.innerHTML = html;
+  const show = $("#c-show"); if(show) show.onclick = reveal;
+  const ag = $("#c-again"); if(ag) ag.onclick = again;
+  const gt = $("#c-got"); if(gt) gt.onclick = gotIt;
+}
+function reveal(){ if(!queue.length) return; revealed = true; renderCard(); if(dir==="en") speak(queue[0].es); }
+function again(){ const p = queue.shift(); queue.splice(Math.min(3, queue.length), 0, p); revealed = false; renderCard(); }
+function gotIt(){ const p = queue.shift(); known.add(p.es); store.set("cuaderno-known", [...known]); revealed = false; renderCard(); }
+function setDir(d){ dir = d; store.set("cuaderno-dir", d); $("#d-en").setAttribute("aria-pressed", d==="en"); $("#d-es").setAttribute("aria-pressed", d==="es"); revealed=false; renderCard(); }
+$("#d-en").onclick = () => setDir("en");
+$("#d-es").onclick = () => setDir("es");
+cSel.onchange = () => { cat = cSel.value; store.set("cuaderno-cat", cat); buildQueue(); renderCard(); };
+let resetArmed = false;
+$("#c-reset").onclick = e => {
+  if(!resetArmed){ resetArmed = true; e.target.textContent = "Click again to reset"; setTimeout(()=>{ resetArmed=false; e.target.textContent="Reset topic"; }, 3000); return; }
+  resetArmed = false; e.target.textContent = "Reset topic";
+  deck().forEach(p => known.delete(p.es)); store.set("cuaderno-known", [...known]); buildQueue(); renderCard();
+};
+document.addEventListener("keydown", e => {
+  if($("#v-practicar").hidden || $("#p-cards").hidden) return;
+  if(e.target.matches("input,select,textarea")) return;
+  if(e.key === " " && !revealed){ e.preventDefault(); reveal(); }
+  else if(e.key === "1" && revealed) again();
+  else if(e.key === "2" && revealed) gotIt();
+  else if((e.key === "s" || e.key === "S") && queue.length) speak(queue[0].es);
+});
+
+/* practice mode switch */
+function setMode(m){
+  $("#p-cards").hidden = m !== "cards"; $("#p-drill").hidden = m !== "drill";
+  $("#m-cards").setAttribute("aria-pressed", m==="cards"); $("#m-drill").setAttribute("aria-pressed", m==="drill");
+  store.set("cuaderno-mode", m);
+  if(m === "drill") setTimeout(() => $("#dr-in").focus(), 0);
+}
+$("#m-cards").onclick = () => setMode("cards");
+$("#m-drill").onclick = () => setMode("drill");
+
+/* ---------- verb engine ---------- */
+const PRON = ["yo","tú","él / ella","nosotros","vosotros","ellos"];
+const VERBS = {hablar:"to speak",trabajar:"to work",caminar:"to walk",bailar:"to dance",comer:"to eat",beber:"to drink",correr:"to run",aprender:"to learn",vivir:"to live",escribir:"to write",abrir:"to open",ir:"to go",hacer:"to do / make",tener:"to have"};
+const END = {
+  present:{ar:["o","as","a","amos","áis","an"],er:["o","es","e","emos","éis","en"],ir:["o","es","e","imos","ís","en"]},
+  pret:{ar:["é","aste","ó","amos","asteis","aron"],er:["í","iste","ió","imos","isteis","ieron"],ir:["í","iste","ió","imos","isteis","ieron"]},
+  fut:["é","ás","á","emos","éis","án"]
+};
+const IRR = {
+  ir:{present:["voy","vas","va","vamos","vais","van"],pret:["fui","fuiste","fue","fuimos","fuisteis","fueron"],ger:"yendo"},
+  hacer:{present:["hago","haces","hace","hacemos","hacéis","hacen"],pret:["hice","hiciste","hizo","hicimos","hicisteis","hicieron"],fut:"har",part:"hecho"},
+  tener:{present:["tengo","tienes","tiene","tenemos","tenéis","tienen"],pret:["tuve","tuviste","tuvo","tuvimos","tuvisteis","tuvieron"],fut:"tendr"},
+  escribir:{part:"escrito"}, abrir:{part:"abierto"}
+};
+const AUX = {
+  iraa:["voy a","vas a","va a","vamos a","vais a","van a"],
+  perf:["he","has","ha","hemos","habéis","han"],
+  prog:["estaba","estabas","estaba","estábamos","estabais","estaban"],
+  ibaa:["iba a","ibas a","iba a","íbamos a","ibais a","iban a"]
+};
+const TENSES = [
+  {k:"present",name:"Present",es:"presente",when:"Now, habits and routines. I speak, I'm speaking.",ex:["Hablo un poco de español","I speak a little Spanish"]},
+  {k:"iraa",name:"Going to",es:"ir a + infinitivo",when:"Plans. The everyday way to talk about the future.",ex:["Voy a viajar a Italia","I'm going to travel to Italy"]},
+  {k:"fut",name:"Future",es:"futuro",when:"Will do. A little more certain or formal than ir a.",ex:["Volveré a España","I will come back to Spain"]},
+  {k:"perf",name:"Have done",es:"pretérito perfecto",when:"In Spain, use this for anything that happened today, this morning or this week.",ex:["Hoy he trabajado","I've worked today"]},
+  {k:"pret",name:"Did",es:"pretérito indefinido",when:"Finished events at a finished time: yesterday, last night, last year.",ex:["Ayer comí paella con mis amigos","Yesterday I ate paella with my friends"]},
+  {k:"prog",name:"Was doing",es:"estaba + gerundio",when:"In the middle of something in the past. The -ando / -iendo form is the English -ing.",ex:["Estaba caminando","I was walking"]},
+  {k:"ibaa",name:"Was going to",es:"iba a + infinitivo",when:"A plan that didn't happen.",ex:["Iba a correr, pero estaba cansado","I was going to run, but I was tired"]}
+];
+const typ = v => v.slice(-2);
+const stem = v => v.slice(0,-2);
+function participle(v){ const i = IRR[v]; if(i && i.part) return [{t:i.part,c:"irr"}]; return [{t:stem(v),c:"st"},{t:typ(v)==="ar"?"ado":"ido",c:"en"}]; }
+function gerund(v){ const i = IRR[v]; if(i && i.ger) return [{t:i.ger,c:"irr"}]; return [{t:stem(v),c:"st"},{t:typ(v)==="ar"?"ando":"iendo",c:"en"}]; }
+function conj(v, k, p){
+  const i = IRR[v] || {};
+  if(k === "present" || k === "pret"){
+    if(i[k]) return [{t:i[k][p],c:"irr"}];
+    return [{t:stem(v),c:"st"},{t:END[k][typ(v)][p],c:"en"}];
+  }
+  if(k === "fut") return i.fut ? [{t:i.fut,c:"irr"},{t:END.fut[p],c:"en"}] : [{t:v,c:"st"},{t:END.fut[p],c:"en"}];
+  if(k === "iraa" || k === "ibaa") return [{t:AUX[k][p]+" ",c:"aux"},{t:v,c:"st"}];
+  if(k === "perf") return [{t:AUX.perf[p]+" ",c:"aux"}, ...participle(v)];
+  if(k === "prog") return [{t:AUX.prog[p]+" ",c:"aux"}, ...gerund(v)];
+}
+const plain = parts => parts.map(x => x.t).join("");
+const fmt = parts => `<span class="f">${parts.map(x => `<span class="${x.c}">${esc(x.t)}</span>`).join("")}</span>`;
+
+/* verb tables */
+const vSel = $("#v-verb");
+vSel.innerHTML = Object.entries(VERBS).map(([v,en]) => `<option value="${v}">${v} · ${en}</option>`).join("");
+vSel.value = store.get("cuaderno-verb", "comer");
+if(!VERBS[vSel.value]) vSel.value = "comer";
+function renderVerbs(){
+  const v = vSel.value; store.set("cuaderno-verb", v);
+  $("#v-tenses").innerHTML = TENSES.map(t => `
+    <div class="panel tense">
+      <span class="eyebrow">${t.es}</span>
+      <h3>${t.name}</h3>
+      <p class="when">${t.when}</p>
+      <table>${PRON.map((p,i)=>`<tr><td>${p}</td><td>${fmt(conj(v,t.k,i))}</td></tr>`).join("")}</table>
+      <div class="ex">${esc(t.ex[0])}<i>${esc(t.ex[1])}</i></div>
+    </div>`).join("");
+}
+vSel.onchange = renderVerbs;
+
+$("#refl").innerHTML = `<tr><th></th><th>lavarse · to wash</th><th>Pronoun</th></tr>` +
+  [["yo","me lavo","me"],["tú","te lavas","te"],["él / ella","se lava","se"],["nosotros","nos lavamos","nos"],["vosotros","os laváis","os"],["ellos","se lavan","se"]]
+  .map(r => `<tr><td style="color:var(--muted)">${r[0]}</td><td style="color:var(--ink);font-weight:700">${r[1]}</td><td>${r[2]}</td></tr>`).join("") +
+  `<tr><td colspan="3" style="color:var(--muted);font-size:.85rem;padding-top:10px">Also: me ducho, me visto, me despierto, me mudo, me jubilo, me voy</td></tr>`;
+
+const PARTS = [
+  ["open","abrir","abierto","ah-BYEHR-toh"],["cover","cubrir","cubierto","koo-BYEHR-toh"],["discover","descubrir","descubierto","des-koo-BYEHR-toh"],
+  ["say","decir","dicho","DEE-choh"],["predict","predecir","predicho","preh-DEE-choh"],
+  ["write","escribir","escrito","es-KREE-toh"],["describe","describir","descrito","des-KREE-toh"],["enrol","inscribir","inscrito","eens-KREE-toh"],["subscribe","suscribir","suscrito","soos-KREE-toh"],
+  ["do / make","hacer","hecho","EH-choh"],["undo","deshacer","deshecho","des-EH-choh"],["satisfy","satisfacer","satisfecho","sah-tees-fah-EH-choh"],
+  ["die","morir","muerto","MWEHR-toh"],
+  ["put","poner","puesto","PWES-toh"],["compose","componer","compuesto","kom-PWES-toh"],["suppose","suponer","supuesto","soo-PWES-toh"],["oppose","oponer","opuesto","oh-PWES-toh"],
+  ["solve","resolver","resuelto","rreh-SWEL-toh"],["return, come back","volver","vuelto","BWEL-toh"],["give back","devolver","devuelto","deh-BWEL-toh"],["wrap","envolver","envuelto","en-BWEL-toh"],["absolve","absolver","absuelto","ab-SWEL-toh"],
+  ["break","romper","roto","RROH-toh"],
+  ["see","ver","visto","BEES-toh"],["foresee","prever","previsto","preh-BEES-toh"],["provide","proveer","provisto","proh-BEES-toh"],
+  ["fry","freír","frito","FREE-toh"],["print","imprimir","impreso","eem-PREH-soh"],
+  ["hear","oír","oído","oh-EE-doh"],["bring","traer","traído","trah-EE-doh"],["believe","creer","creído","kreh-EE-doh"],["fall","caer","caído","kah-EE-doh"],["read","leer","leído","leh-EE-doh"]
+];
+$("#parts").innerHTML = `<tr><th>English</th><th>Verb</th><th>Participle</th><th>Say it</th><th></th></tr>` +
+  PARTS.map(r => `<tr><td>${r[0]}</td><td>${r[1]}</td><td class="es">${r[2]}</td><td class="pr">${r[3]}</td><td>${speakBtn(r[2])}</td></tr>`).join("") +
+  `<tr><td colspan="5" style="color:var(--muted);font-size:.85rem;padding-top:10px">The last five are regular apart from the accent on the í: oído, traído, creído, caído, leído.</td></tr>`;
+
+/* ---------- drill ---------- */
+const dSel = $("#dr-tense");
+dSel.innerHTML = `<option value="mix">All tenses</option>` + TENSES.map(t => `<option value="${t.k}">${t.name} · ${t.es}</option>`).join("");
+dSel.value = store.get("cuaderno-drill", "mix");
+let cur = null, streak = 0, answered = false;
+const strip = s => s.normalize("NFD").replace(/[̀-ͯ]/g,"");
+const norm = s => s.toLowerCase().trim().replace(/\s+/g," ").replace(/^(yo|tú|tu|él|el|ella|usted|nosotros|nosotras|vosotros|vosotras|ellos|ellas|ustedes)\s+/,"");
+const PRON_EN = ["I","you","he / she","we","you all","they"];
+function nextQ(){
+  const vs = Object.keys(VERBS);
+  const v = vs[Math.floor(Math.random()*vs.length)];
+  const t = dSel.value === "mix" ? TENSES[Math.floor(Math.random()*TENSES.length)] : TENSES.find(x => x.k === dSel.value);
+  const p = Math.floor(Math.random()*6);
+  cur = {v,t,p,ans:plain(conj(v,t.k,p))};
+  answered = false;
+  $("#dr-label").textContent = `${t.name} · ${t.es}`;
+  $("#dr-q").innerHTML = `<b>${PRON[p]}</b> + <b>${v}</b> <span style="color:var(--muted);font-weight:400">(${PRON_EN[p]}, ${VERBS[v]})</span>`;
+  $("#dr-in").value = ""; $("#dr-res").textContent = ""; $("#dr-res").className = "result";
+  $("#dr-streak").textContent = streak ? `Streak: ${streak}` : "";
+}
+$("#dr-form").addEventListener("submit", e => {
+  e.preventDefault();
+  if(answered){ nextQ(); return; }
+  const got = norm($("#dr-in").value); if(!got) return;
+  const res = $("#dr-res");
+  answered = true;
+  if(got === cur.ans){ streak++; res.className = "result ok"; res.innerHTML = `¡Correcto! ${esc(cur.ans)} <span class="hint">Press Enter for the next one</span>`; speak(cur.ans); }
+  else if(strip(got) === strip(cur.ans)){ streak++; res.className = "result near"; res.innerHTML = `Nearly. Watch the accent: <span style="color:var(--red)">${esc(cur.ans)}</span>`; speak(cur.ans); }
+  else { streak = 0; res.className = "result bad"; res.innerHTML = `Not quite. It's <span style="color:var(--ink)">${esc(cur.ans)}</span>`; speak(cur.ans); }
+  $("#dr-streak").textContent = streak ? `Streak: ${streak}` : "";
+});
+$("#dr-next").onclick = () => { nextQ(); $("#dr-in").focus(); };
+dSel.onchange = () => { store.set("cuaderno-drill", dSel.value); nextQ(); };
+document.querySelectorAll(".accents button").forEach(b => b.onclick = () => {
+  const i = $("#dr-in"); const s = i.selectionStart ?? i.value.length, e2 = i.selectionEnd ?? i.value.length;
+  i.value = i.value.slice(0,s) + b.textContent + i.value.slice(e2); i.focus(); i.setSelectionRange(s+1,s+1);
+});
+
+/* ---------- phrasebook ---------- */
+let fCat = "all";
+$("#f-chips").innerHTML = [["all","All"],...Object.entries(CATS)].map(([k,v]) => `<button type="button" class="chip" data-c="${k}" aria-pressed="${k==="all"}">${v}</button>`).join("");
+$("#f-chips").addEventListener("click", e => {
+  const b = e.target.closest(".chip"); if(!b) return;
+  fCat = b.dataset.c;
+  document.querySelectorAll(".chip").forEach(c => c.setAttribute("aria-pressed", c === b));
+  renderPhrases();
+});
+$("#f-q").addEventListener("input", renderPhrases);
+function renderPhrases(){
+  const q = strip($("#f-q").value.toLowerCase().trim());
+  const list = PHRASES.filter(p => (fCat==="all" || p.cat===fCat) && (!q || strip((p.en+" "+p.es).toLowerCase()).includes(q)));
+  if(!list.length){ $("#f-list").innerHTML = `<div class="empty">Nothing matches “${esc($("#f-q").value)}”. Try a shorter word, in English or Spanish.</div>`; return; }
+  let html = "", last = "";
+  list.forEach(p => {
+    if(p.cat !== last){ html += `<div class="group-h eyebrow">${CATS[p.cat]}</div>`; last = p.cat; }
+    html += `<div class="row"><div class="en">${esc(p.en)}</div><div class="es">${esc(p.es)}${p.pr?`<span class="pr">${esc(p.pr)}</span>`:""}</div>${speakBtn(p.es)}</div>`;
+  });
+  $("#f-list").innerHTML = html;
+}
+
+/* ---------- corrections ---------- */
+const FIXES = [
+  ["mistake","Ellos van beber un zumo","Ellos van a beber un zumo","“ir a” always needs the a"],
+  ["mistake","Vosotras iremos","Vosotras iréis","iremos is “we will go”"],
+  ["mistake","Ellos iran","Ellos irán","the accent shows the stress: ee-RAN"],
+  ["mistake","You went: Te fuiste","You went: Tú fuiste","te fuiste means “you left”"],
+  ["mistake","Vosotros fueron","Vosotros fuisteis","fueron is “they went”"],
+  ["mistake","Preterite yo ending -i (comi)","-í with an accent (comí, viví)","the accent is part of the ending"],
+  ["mistake","Ellos se levan","Ellos se lavan","lavarse is a regular -ar verb"],
+  ["mistake","¿Qué pasó? = What's your name?","¿Qué ha pasado? = What happened?","“what's your name” is ¿Cómo te llamas?"],
+  ["mistake","Largo / Laga","Largo / Larga",""],
+  ["mistake","Longer: más extenso","Longer: más largo","extenso means extensive"],
+  ["mistake","Ya me jubile / No me he jubiiado","Ya me he jubilado / Todavía no me he jubilado","typos, plus the accent on jubilé"],
+  ["mistake","Ellos me estan visitando","Me están visitando","están needs its accent"],
+  ["mistake","Cada quien paga lo soyo","Cada uno paga lo suyo","suyo, and cada uno in Spain"],
+  ["mistake","prender → preso","encender → encendido","preso means a prisoner!"],
+  ["mistake","elegir → electo","elegir → elegido","electo is only for elected officials"],
+  ["mistake","-ando / -iendo labelled “Past”","That's the -ing form (gerundio)","it only becomes past with estaba"],
+  ["mistake","Está divertido / Está aburrido","Es divertido / Es aburrido","está aburrido means “he's bored”"],
+  ["mistake","Iré a ti","Iré a verte","“I'll come to see you”"],
+  ["mistake","teinda, resturante, Esapaña","tienda, restaurante, España",""],
+  ["spain","Pronunciation: c and z as “s”","c (before e, i) and z as “th”","gracias is GRAH-thyas in most of Spain"],
+  ["spain","Buen provecho","¡Que aproveche!","what you'll hear at the table in Spain"],
+  ["spain","Apúrate","Date prisa","apurarse is Latin American"],
+  ["spain","Ya regresé","Ya he vuelto","Spain uses volver"],
+  ["spain","Voy por ti / Ven por mí","Voy a recogerte / Ven a recogerme","recoger = pick someone up"],
+  ["spain","Me desperté esta mañana","Me he despertado esta mañana","this morning is still today, so Spain uses he + -ado"],
+  ["spain","¿Qué dijiste?","¿Qué has dicho?","same reason: it just happened"],
+  ["spain","Estoy lavando los platos","Estoy fregando los platos","fregar = to wash up"],
+  ["spain","Me estoy cepillando los dientes","Me estoy lavando los dientes","more natural in Spain"],
+  ["spain","El almuerzo (lunch)","La comida","in much of Spain, almuerzo is a mid-morning snack"],
+  ["spain","La cédula de identidad de extranjero","La TIE, tarjeta de identidad de extranjero","cédula is the Latin American word"],
+  ["spain","¿Puedo tener…?","¿Me pones…?","how you order in a bar or café"],
+  ["spain","Fui a surfear","Fui a hacer surf",""],
+  ["spain","Presioné el botón","He pulsado el botón","pulsar is the word on Spanish buttons"],
+  ["spain","No tengo idea","No tengo ni idea",""],
+  ["spain","¿Estás bromeando?","¿Estás de broma?",""],
+  ["spain","Estoy ocupado (a busy place)","Está concurrido / Hay mucha gente","ocupado is for people, or a taken seat"]
+];
+let fxF = "all";
+function renderFixes(){
+  $("#fixes").innerHTML = FIXES.filter(f => fxF==="all" || f[0]===fxF).map(f => `
+    <div class="panel fix">
+      <span class="tag" style="grid-column:1/-1">${f[0]==="spain"?"Spain":"Mistake"}</span>
+      <span class="was">${esc(f[1])}</span><span class="now">${esc(f[2])}</span>
+      ${f[3]?`<span class="why">${esc(f[3])}</span>`:""}
+    </div>`).join("");
+}
+document.querySelectorAll("[data-fx]").forEach(b => b.onclick = () => {
+  fxF = b.dataset.fx;
+  document.querySelectorAll("[data-fx]").forEach(x => x.setAttribute("aria-pressed", x===b));
+  renderFixes();
+});
+
+/* ---------- boot ---------- */
+setDir(dir);
+buildQueue(); renderCard();
+setMode(store.get("cuaderno-mode","cards") === "drill" ? "drill" : "cards");
+nextQ(); renderVerbs(); renderPhrases(); renderFixes(); route();
+if(canSpeak){ try{ speechSynthesis.getVoices(); speechSynthesis.onvoiceschanged = () => {}; }catch(e){} }
+})();
+</script>
+</body>
+</html>
